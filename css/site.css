@@ -1,0 +1,56 @@
+#scoreboard {
+	text-align: center;
+}
+
+.memory-card {
+	display : flex;
+	border-width: 5px;
+	border-style: solid;
+	border-radius: 10px;
+	border-color: #06f;
+	background-color: #fff;
+	width: 100px;
+	height: 100px;
+	text-align: center;
+	color: #06f;
+	align-items: center;
+	font-size: 3em;
+	margin: 12.5px;
+}
+
+.memory-card div {
+	width: 100%;
+}
+
+.memory-card-top {
+	background-color: #00f;
+}
+
+.hide-text {
+	display: none;
+}
+
+#scoreboard {
+	width: 900px;
+	background-color: #fff;
+	border-width: 2px;
+	border-style: solid;
+	margin-bottom: 50px;
+}
+
+#gameboard {
+	display: flex;
+	flex-wrap: wrap;
+	width: 900px;
+	height: 800px;
+	background-color: #fff;
+}
+
+#app {
+	min-width: 960px;
+	min-height: 960px;
+	margin-left: auto;
+	margin-right: auto;
+	text-align: center;
+	background-color: #0c9ee8;
+}
