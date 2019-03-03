@@ -26,6 +26,10 @@
 	background-color: #00f;
 }
 
+.memory-card-top i {
+	display: none;
+}
+
 .hide-text {
 	display: none;
 }
