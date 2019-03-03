@@ -16,6 +16,7 @@
 	align-items: center;
 	font-size: 3em;
 	margin: 12.5px;
+	cursor: pointer;
 }
 
 .memory-card div {
@@ -40,6 +41,10 @@
 	border-width: 2px;
 	border-style: solid;
 	margin-bottom: 50px;
+}
+
+.rating-stars{
+	color : #0C2AE8;
 }
 
 #gameboard {

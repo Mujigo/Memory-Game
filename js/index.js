@@ -30,11 +30,16 @@ window.onload = function () {
 		data : {
 			cardsInPlay : [
 			],
-			playerMoves : 0,
-			playerStartTime : 0,
-			currentTime : 0,
+			playerStats : {
+				playerMoves : 0,
+				playerStartTime : 0,
+				playerRating : 3,
+				currentTime : 0
+			},
 			leaderBoard : [],
 			selectedCards : {
+				correctCards : [],
+				moveInProgress : 0,
 				cardOne : null,
 				cardTwo : null
 			},
@@ -45,68 +50,99 @@ window.onload = function () {
 		methods : {
 			newgame : function () {
 
-				currentTime = new Date();
-				playerStartTime = currentTime;
+				document.querySelector('#start').play();
+				this.playerStats.currentTime = new Date();
+				this.playerStats.playerStartTime = this.playerStats.currentTime;
+				this.playerStats.playerMoves = 0;
+				this.selectedCards.correctCards = [];
+				this.selectedCards.cardOne = null;
+				this.selectedCards.cardTwo = null;
 
 				// Reset the cards in play list
 				this.cardsInPlay = [];
+				document.querySelectorAll('.memory-card').forEach(function(card) {
+					card.classList.add('memory-card-top');
+				})
 
 				// Make a copy of the list of cards array.
-				var avaliable = this.cards.slice(0);
+				let avaliable = this.cards.slice(0);
 
 				// We loop throught picking 4 cards at random and take the card out of the array so we can't pick a card twice.
 				// The array lenght is used so we don't pick a index outside of the avaliable cards array.
-				for(var x=0;x<21;x++) {
-					var c = Math.floor(Math.random() * avaliable.length-1);
+				for(let x=0;x<21;x++) {
+					let c = Math.floor(Math.random() * avaliable.length-1);
 					this.cardsInPlay.push(avaliable.splice(c,1)[0]);
 				}
 
 
 				// We make a copy of the cardsInPlay array so that we can pair them up.
-				var toPair = this.cardsInPlay.slice(0);
+				let toPair = this.cardsInPlay.slice(0);
 
 				// We keep picking a random index from the array and insert the removed value into the cardsInPlay array so that the pairs
 				// are inserted randomly. That way the board is more random.
 				while(toPair.length > 0) {
-					var c = Math.floor(Math.random() * toPair.length-1);
+					let c = Math.floor(Math.random() * toPair.length-1);
 					this.cardsInPlay.splice(Math.floor(Math.random() * this.cardsInPlay.length-1),0,toPair.splice(c,1)[0]);
 				}
+
+
 				console.log(this.cardsInPlay);
+
 			},
 			handlecard : function (data) {
 
-				if(this.selectedCards.cardOne)
-					console.log('Card One!')
-
-				if (!this.selectedCards.cardOne)
-					this.selectedCards.cardOne = data;
-				else if (!this.selectedCards.cardTwo)
-					this.selectedCards.cardTwo = data;
-
-				if (this.selectedCards.cardOne)
-					this.selectedCards.cardOne.event.target.classList.remove('memory-card-top');
-
-				if (this.selectedCards.cardTwo)
-					this.selectedCards.cardTwo.event.target.classList.remove('memory-card-top');
-
-				if (this.selectedCards.cardOne && this.selectedCards.cardTwo) {
-					if (this.selectedCards.cardOne.cardText == this.selectedCards.cardTwo.cardText) {
-						this.selectedCards.cardOne = null;
-						this.selectedCards.cardTwo = null;
+				if(this.selectedCards.correctCards.length < 42) {
+					if (!this.selectedCards.cardOne && !this.selectedCards.correctCards.includes(data.cardIndex)) {
+						this.selectedCards.cardOne = data;
+						this.selectedCards.cardOne.event.target.classList.remove('memory-card-top');
+						this.selectedCards.cardOne.event.target.classList.add('animated', 'flipInX');
 					}
-					else {
-						setTimeout(function () {
-							app.selectedCards.cardOne.event.target.classList.add('memory-card-top');
-							app.selectedCards.cardTwo.event.target.classList.add('memory-card-top');
-							app.selectedCards.cardOne = null;
-							app.selectedCards.cardTwo = null;
-						},2000);
+					else if (!this.selectedCards.cardTwo && !this.selectedCards.correctCards.includes(data.cardIndex) && data.cardIndex != this.selectedCards.cardOne.cardIndex) {
+						this.selectedCards.cardTwo = data;
+						this.selectedCards.cardTwo.event.target.classList.remove('memory-card-top');
+						this.selectedCards.cardTwo.event.target.classList.add('animated', 'flipInX');
+					}
+
+					if (this.selectedCards.cardOne && this.selectedCards.cardTwo && this.selectedCards.moveInProgress == 0) {
+						this.selectedCards.moveInProgress = 1;
+						this.playerStats.playerMoves++;
+
+						if (this.selectedCards.cardOne.cardText == this.selectedCards.cardTwo.cardText) {
+							document.querySelector('#tada').play();
+							this.selectedCards.correctCards.push(this.selectedCards.cardOne.cardIndex)
+							this.selectedCards.correctCards.push(this.selectedCards.cardTwo.cardIndex)
+							this.selectedCards.cardOne.event.target.classList.remove('animated', 'flipInX');
+							this.selectedCards.cardTwo.event.target.classList.remove('animated', 'flipInX');
+							this.selectedCards.cardOne.event.target.classList.add('animated', 'tada');
+							this.selectedCards.cardTwo.event.target.classList.add('animated', 'tada');
+							this.selectedCards.cardOne = null;
+							this.selectedCards.cardTwo = null;
+							this.selectedCards.moveInProgress = 0;
+
+							if(this.selectedCards.correctCards.length == 42)
+								document.querySelector('#winner').play();
+						}
+						else {
+							document.querySelector('#slap').play();
+							setTimeout(function (cardOne, cardTwo) {
+								cardOne.classList.add('memory-card-top');
+								cardTwo.classList.add('memory-card-top');
+								cardOne.classList.remove('animated', 'flipInX');
+								cardTwo.classList.remove('animated', 'flipInX');
+								app.selectedCards.cardOne = null;
+								app.selectedCards.cardTwo = null;
+								app.selectedCards.moveInProgress = 0;
+							},2000,app.selectedCards.cardOne.event.target,app.selectedCards.cardTwo.event.target);
+						}
 					}
 				}
-				//console.log(`${this.selectedCards.cardOne.cardText} ${this.selectedCards.cardTwo.cardText}`);
-
+			}
+		},
+		computed : {
+			matchesleft : function() {
+				return 21 - (this.selectedCards.correctCards.length / 2);
 			}
 		}
-	})
 
+	})
 }

@@ -28,11 +28,12 @@
 		<div id="scoreboard">
 			<div class="row">
 				<div class="col">
-					<i class="far fa-star"></i>
+					<p>Rating: <i class="fas fa-star rating-stars" v-for="n in playerStats.playerRating"></i></p>
+					<p>Moves: {{ playerStats.playerMoves }}</p>
+					<p>Time: {{ playerStats.currentTime }}</p>
 				</div>
 				<div class="col">
-					<i class="far fa-hourglass"></i>
-					<p>{{ currentTime }}</p>
+					<p>Matches Left: {{ matchesleft }}</p>
 				</div>
 				<div class="col">
 					<button class="btn btn-success" v-on:click="newgame">New Game</button>
@@ -42,6 +43,11 @@
 		<div id="gameboard">
 			<memory-card v-for="(card, index) in cardsInPlay" :key="index" v-bind:card-text="cardsInPlay[index]" v-bind:card-index="index" v-on:handlecard="handlecard"></memory-card>
 		</div>
+		<audio id="tada" src="sounds/TaDa.mp3" type="audio/mp3"></audio>
+		<audio id="slap" src="sounds/Slap.mp3" type="audio/mp3"></audio>
+		<audio id="sad" src="sounds/Sad_Trombone.mp3" type="audio/mp3"></audio>
+		<audio id="start" src="sounds/chinese-gong.mp3" type="audio/mp3"></audio>
+		<audio id="winner" src="sounds/Cheering3.mp3" type="audio/mp3"></audio>
 	</div>
 </body>
 </html>
