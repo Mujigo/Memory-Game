@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Memory Game</title>
 	<!-- Vue.js -->
 	<script src="js/vue.js"></script>
@@ -19,30 +21,119 @@
 	<!-- Animate.css -->
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css">
 
+	<!-- Moments.js -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.js"></script>
+
+	<!-- Googel webfonts :) -->
+	<link href="https://fonts.googleapis.com/css?family=Acme|ZCOOL+QingKe+HuangYou" rel="stylesheet">
+
 	<!-- My JS and CSS -->
 	<script src="js/index.js"></script>
-	<link rel="stylesheet" type="text/css" href="css/site.css">
+	<link rel="stylesheet" href="css/site.css">
 </head>
 <body>
-	<div class="container" id="app">
-		<div id="scoreboard">
+	<div class="container" id="app" class="app">
+		<!-- Scoreboard -->
+		<div class="scoreboard">
 			<div class="row">
 				<div class="col">
-					<p>Rating: <i class="fas fa-star rating-stars" v-for="n in playerStats.playerRating"></i></p>
+					<p><span class="rating">Rating: </span><i class="fas fa-star rating-stars" v-for="n in playerStats.playerRating"></i></p>
+					<p><span class="time">Time: </span>{{ playerStats.currentTime }}</p>
+				</div>
+				<div class="col">
 					<p>Moves: {{ playerStats.playerMoves }}</p>
-					<p>Time: {{ playerStats.currentTime }}</p>
+					<p class="matches-left-single-line">Matches Left: {{ matchesleft }}</p>
+					<div class="matches-left-dual-lines">
+						<p>Matches Left</p>
+						<p>{{ matchesleft }}</p>
+					</div>
 				</div>
 				<div class="col">
-					<p>Matches Left: {{ matchesleft }}</p>
-				</div>
-				<div class="col">
-					<button class="btn btn-success" v-on:click="newgame">New Game</button>
+					<button v-on:click="newgameModal" class="btn-success">New Game</button>
+					<button v-if="showRestart" class="btn-danger" v-on:click="restart">Restart</button>
 				</div>
 			</div>
 		</div>
-		<div id="gameboard">
+		<!-- Leaderboard -->
+		<div class="leaderboard" v-if="renderLeaderBoard">
+			<div class="row">
+				<div class="col">
+					<h1><i class="fas fa-trophy leadertrophy"></i>The Top 10 Players<i class="fas fa-trophy leadertrophy"></i></h1>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col">
+					<h3>Easy</h3>
+						<div v-for="(player, index) in leaderBoard['Easy']">
+							<p>
+								<div>{{ player.playerName }}</div>
+								<div><span class="rating">Rating: </span><i class="fas fa-star rating-stars" v-for="s in player.playerRating"></i></div>
+								<div><span class="time">Time: </span>{{ player.playerTime }}</div>
+							</p>
+						</div>
+				</div>
+				<div class="col">
+					<h3>Normal</h3>
+						<div v-for="(player, index) in leaderBoard['Normal']">
+							<p>
+								<div>{{ player.playerName }}</div>
+								<div><span class="rating">Rating: </span><i class="fas fa-star rating-stars" v-for="s in player.playerRating"></i></div>
+								<div><span class="time">Time: </span>{{ player.playerTime }}</div>
+							</p>
+						</div>
+				</div>
+				<div class="col">
+					<h3>Hard</h3>
+						<div v-for="(player, index) in leaderBoard['Hard']">
+							<p>
+								<div>{{ player.playerName }}</div>
+								<div><span class="rating">Rating: </span><i class="fas fa-star rating-stars" v-for="s in player.playerRating"></i></div>
+								<div><span class="time">Time: </span>{{ player.playerTime }}</div>
+							</p>
+						</div>
+				</div>
+			</div>
+		</div>
+		<!-- Gameboard -->
+		<div class="gameboard" v-if="renderGameBoard">
 			<memory-card v-for="(card, index) in cardsInPlay" :key="index" v-bind:card-text="cardsInPlay[index]" v-bind:card-index="index" v-on:handlecard="handlecard"></memory-card>
 		</div>
+ 		<!-- Modal -->
+		<div class="modal" tabindex="-1" role="dialog" id="modal">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h2 class="modal-title" id="modal-title">{{ modalData.modalTitle }}</h2>
+					</div>
+					<div class="modal-body" id="modal-body">
+						<div v-if="modalData.entername">
+							<p>Enter you name<span class="enter-your-name-colon">: </span><input type="text" id="playername"></p>
+						</div>
+						<div v-if="modalData.youwin">
+							<h1>You Win!!!</h1>
+							<div>{{ playerStats.playerName }}</div>
+							<div>Rating: <i class="fas fa-star rating-stars" v-for="s in playerStats.playerRating"></i></div>
+							<div>Time: {{ playerStats.currentTime }}</div>
+						</div>
+						<div v-if="modalData.cheat">
+							<p>Next time don't cheat!</p>
+						</div>
+					</div>
+					<div class="modal-footer" id="modal-footer">
+						<p>Level:
+						<select id="level">
+							<option value="10">Easy</option>
+							<option value="20">Normal</option>
+							<option value="30">Hard</option>
+						</select>
+						</p>
+						<button class="btn btn-success" v-on:click="newgame">{{ modalData.modalButtonText }}</button>
+						<button class="btn btn-danger" v-on:click="closeModal" v-if="modalData.youwin">No Thanks</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- Sounds -->
 		<audio id="tada" src="sounds/TaDa.mp3" type="audio/mp3"></audio>
 		<audio id="slap" src="sounds/Slap.mp3" type="audio/mp3"></audio>
 		<audio id="sad" src="sounds/Sad_Trombone.mp3" type="audio/mp3"></audio>

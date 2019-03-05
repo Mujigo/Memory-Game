@@ -1,26 +1,17 @@
-#scoreboard {
-	text-align: center;
-}
-
+/* Game Cards */
 .memory-card {
-	display : flex;
-	border-width: 5px;
-	border-style: solid;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	border: 5px solid #06f;
 	border-radius: 10px;
-	border-color: #06f;
 	background-color: #fff;
+	color: #06f;
 	width: 100px;
 	height: 100px;
-	text-align: center;
-	color: #06f;
-	align-items: center;
-	font-size: 3em;
-	margin: 12.5px;
+	font-size: 4vw;
+	margin: 5px;
 	cursor: pointer;
-}
-
-.memory-card div {
-	width: 100%;
 }
 
 .memory-card-top {
@@ -31,35 +22,120 @@
 	display: none;
 }
 
-.hide-text {
-	display: none;
+/* Modal */
+.modal {
+	background-color: #000;
 }
 
-#scoreboard {
-	width: 900px;
-	background-color: #fff;
-	border-width: 2px;
-	border-style: solid;
-	margin-bottom: 50px;
+.modal-content {
+	padding: 10px;
+	background-color: #06f;
+	border: 2px solid #06f;
+	border-radius: 5px;
+	color : #fff;
+	text-align: center;
+	font-family: 'ZCOOL QingKe HuangYou', cursive;
+	font-size: 30px;
+}
+
+/* Scoreboard */
+.scoreboard {
+	padding: 10px;
+	background-color: #06f;
+	border: 2px solid #06f;
+	border-radius: 5px;
+	color : #fff;
+	margin: 10px;
+	text-align: center;
+	font-family: 'ZCOOL QingKe HuangYou', cursive;
+	font-size: 2vw;
 }
 
 .rating-stars{
-	color : #0C2AE8;
+	color : #ff0;
 }
 
-#gameboard {
+/* Gameboard */
+.gameboard {
+	border-width: 2px solid #06f;
+	border-radius: 5px;
 	display: flex;
 	flex-wrap: wrap;
-	width: 900px;
-	height: 800px;
-	background-color: #fff;
+	justify-content: center;
+	background-color: #0DEDFF;
 }
 
-#app {
-	min-width: 960px;
-	min-height: 960px;
-	margin-left: auto;
-	margin-right: auto;
+/* Leaderboard */
+.leaderboard {
+	padding: 10px;
+	background-color: #06f;
+	border-width: 2px solid #06f;
+	border-radius: 5px;
+	color : #fff;
+	margin: 10px;
 	text-align: center;
+	font-family: 'Acme', sans-serif;
+}
+
+.leadertrophy {
+	margin-left: 10px;
+	margin-right: 10px;
+	color: #ff0;
+}
+
+/* Vue App */
+.app {
+	display: flex;
+	flex-wrap: wrap;
+	flex-direction: column;
+}
+
+/* Everything else */
+body {
 	background-color: #0c9ee8;
+}
+
+/* Media queries */
+@media screen and (max-width: 1250px) {
+	.memory-card {
+		border: 3px solid #06f;
+		width: 75px;
+		height: 75px;
+	}
+
+	.matches-left-dual-lines {
+		display: none;
+	}
+}
+
+@media screen and (max-width: 1000px) {
+	.memory-card {
+		border: 2px solid #06f;
+		width: 50px;
+		height: 50px;
+	}
+
+	.scoreboard {
+		font-size: 1em;
+	}
+
+	.matches-left-dual-lines {
+		display: none;
+	}
+}
+
+@media screen and (max-width: 500px) {
+	.memory-card {
+		border: 1px solid #06f;
+		width: 25px;
+		height: 25px;
+	}
+
+	.rating,
+	.time,
+	.leadertrophy,
+	.enter-your-name-colon,
+	.matches-left-single-line {
+		display: none;
+	}
 }
