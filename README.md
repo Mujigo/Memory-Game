@@ -17,3 +17,5 @@ The top 10 players for each level of difficuly will be added to the leader board
 * [Animate.css](https://daneden.github.io/animate.css/) - Just-add-water CSS animations
 
 * [Moments.js](https://momentjs.com/) - Parse, validate, manipulate, and display dates and times in JavaScript.
+
+* [Sound Bible](http://soundbible.com) - SoundBible.com offers thousands of free sound effects, sound clips, and straight up sounds.
