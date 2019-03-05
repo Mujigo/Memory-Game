@@ -2,7 +2,7 @@
 
 A memory game with three levels of difficulty. Players are rated on the amount of moves needed to win as well as the time taken. Once the player has completed a move they have the option to restart the game, but it's not fair play.
 
-The top 10 players for each level of difficuly will be added to the leader board.
+The top 10 players for each level of difficuly will be added to the leader board. The leaderboard is stored in the browsers local storage.
 
 ## Dependecies
 
