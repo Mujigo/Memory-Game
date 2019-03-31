@@ -96,7 +96,7 @@ body {
 }
 
 /* Media queries */
-@media screen and (max-width: 1250px) {
+@media screen and (min-width: 1000px) {
 	.memory-card {
 		border: 3px solid #06f;
 		width: 75px;
@@ -108,7 +108,7 @@ body {
 	}
 }
 
-@media screen and (max-width: 1000px) {
+@media screen and (max-width: 999px) and (min-width: 501px) {
 	.memory-card {
 		border: 2px solid #06f;
 		width: 50px;
