@@ -4,6 +4,9 @@ A memory game with three levels of difficulty. Players are rated on the amount o
 
 The top 10 players for each level of difficuly will be added to the leader board. The leaderboard is stored in the browsers local storage.
 
+Click the link below to play the game.
+[Memory Game](https://memory.watson.ninja/)
+
 ## Dependecies
 
 * [Bootstrap 4](https://getbootstrap.com/) - Bootstrap is an open source toolkit for developing with HTML, CSS, and JS.
